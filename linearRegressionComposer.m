@@ -1,4 +1,4 @@
-function [w, pred, idx_to_note, note_to_idx] = linearRegressionComposer(voices, window, voice_no)
+function [w, b, loss, idx_to_note, note_to_idx] = linearRegressionComposer(voices, window, voice_no)
     % Predict a single voice using window based linear regression. 
     %
     % Input:
@@ -8,6 +8,7 @@ function [w, pred, idx_to_note, note_to_idx] = linearRegressionComposer(voices, 
     %
     % Output:
     % - w: linear regression weight vector
+    % - b: linear regression bias term
     % - pred: output predictions based on the training data
     
     % Prepare data for time series linear regression
@@ -20,12 +21,11 @@ function [w, pred, idx_to_note, note_to_idx] = linearRegressionComposer(voices, 
     idx_to_note = containers.Map(1:n_notes, notes);
     note_to_idx = containers.Map(notes, 1:n_notes);
     
-    A = zeros(n_output, window);
+    A = zeros(n_output, window + 1);  % window + 1 because we add a bias term
     for i = window+1:m
         start_idx = i - window;
         end_idx = i - 1;
-        A(start_idx, :) = voices(start_idx:end_idx, voice_no)';
-        %A(i-window, :) = reshape(voices(i-window:(i-1), :), [1, window * n]);
+        A(start_idx, :) = [voices(start_idx:end_idx, voice_no)' 1];
     end
     
     out_notes = zeros(n_output, 1);
@@ -40,9 +40,10 @@ function [w, pred, idx_to_note, note_to_idx] = linearRegressionComposer(voices, 
     end    
     
     % Solve the normal equations, i.e. apply least squares fitting.
-    w = A \ y;
+    weights = A \ y;
+    w_len = size(weights, 1) - 1;
+    w = weights(1:w_len, :);
+    b = weights(w_len+1, :);
     
-    % Predict some data, rounding the numbers to get integer note values.
-   % pred = max(round(A * w), 0);
-    pred = A * w;
+    loss = (1 / n_output) * norm(A(:, 1:window) * w + b - y)^2;
 end
