@@ -1,9 +1,10 @@
-function res = linearRegressionPredict(w, b, n, seed, window, top_k, idx_to_note)
+function res = linearRegressionPredict(W, b, n, seed, window, top_k, idx_to_note)
    % Sample notes using the weight vector w (found using linear regression)
    % for n steps.
    %
    % Input:
-   % - w: weight vector for prediction
+   % - W: linear regression weight matrix
+   % - b: linear regression bias vector 
    % - n: no. of steps to sample
    % - seed: initial 1 x window sized window used for starting the predictions
    % - window: size of the window
@@ -13,10 +14,10 @@ function res = linearRegressionPredict(w, b, n, seed, window, top_k, idx_to_note
    % - res: the sampled notes
    
    res = zeros(n, 1);
-   n_notes = size(w, 2);
+   n_notes = size(W, 2);
    last_out = seed;
    for i = 1:n
-       probs = last_out * w + b;
+       probs = last_out * W + b;
        [~, idxs] = maxk(probs, top_k);
        mask = zeros(1, n_notes);
        for j = 1:idxs
