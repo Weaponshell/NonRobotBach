@@ -56,5 +56,5 @@ function y = note_to_vector(x, offset, total)
     % the opposite sides on the chroma circle or the circle of fifths
     pitch = 2 * log2(fx) - max_p + (max_p - min_p)/2;
     y = [pitch, chroma_x, chroma_y, c5_x, c5_y];
-
+  end
 end

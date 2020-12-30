@@ -20,6 +20,8 @@ function [W, b, loss, idx_to_note, note_to_idx] = linearRegressionComposer(voice
     notes = sort(unique(voices(:, voice_no)));
     n_notes = length(notes);
     n_output = m - window;
+    max_note = notes(n_notes);
+    min_note = notes(2); % idx 1 is 0
     
     % Encode the note values into indexes starting at 1.
     idx_to_note = containers.Map(1:n_notes, notes);
@@ -27,18 +29,23 @@ function [W, b, loss, idx_to_note, note_to_idx] = linearRegressionComposer(voice
     
     % Prepare data for time series linear regression.
     if poly_fitting
-        X = zeros(n_output, window + window^2 + 1);  % + 1 because we add a bias term
+        X = zeros(n_output, 5 * window + (5 * window)^2 + 1);  % + 1 because we add a bias term
     else 
-        X = zeros(n_output, window + 1);
+        X = zeros(n_output, 5 * window + 1);
     end
     for i = window+1:m
         start_idx = i - window;
         end_idx = i - 1;
         window_notes = voices(start_idx:end_idx, voice_no)';
+        enc_data = zeros(1, 5 * length(window_notes));
+        for j = 1:length(window_notes)
+            note = window_notes(j);
+            enc_data(5*(j-1)+1:5*j) = note_to_vector(note, min_note, max_note - min_note + 1);
+        end
         if poly_fitting
-            X(start_idx, :) = [window_notes cartesianProduct(window_notes)' 1];
+            X(start_idx, :) = [enc_data cartesianProduct(enc_data)' 1];
         else
-            X(start_idx, :) = [window_notes 1];
+            X(start_idx, :) = [enc_data 1];
         end
     end
     

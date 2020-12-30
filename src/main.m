@@ -4,12 +4,12 @@ function main(voices)
     % I.e. when top_k = 1, always choose the note with the highest
     % probability.
     top_k = 3;
-    window_size = 50;
-    voice_no = 2;  % voice to use as training data
-    n = 50;  % number of notes to sample
-    poly_fitting = true;  % whether to include polynomials
+    window_size = 10;
+    voice_no = 3;  % voice to use as training data
+    n = 100;  % number of notes to sample
+    poly_fitting = false;  % whether to include polynomials
     
-    seed = zeros(1, window_size); 
+    seed = zeros(1, 5 * window_size); 
     %voice_flipped = flip(voices, 3);
     %seed = voice_flipped(1:window_size);
     if poly_fitting
