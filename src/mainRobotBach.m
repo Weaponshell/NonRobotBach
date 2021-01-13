@@ -1,30 +1,57 @@
+%% Pre-processing
 % load the data
 load F.txt -ascii;
 
 % pre-process the data
 voice1 = preprocess(F(:,1));
-voice2 = preprocess(F(:,1));
-voice3 = preprocess(F(:,1));
-voice4 = preprocess(F(:,1));
+voice2 = preprocess(F(:,2));
+voice3 = preprocess(F(:,3));
+voice4 = preprocess(F(:,4));
 
+%% Linear Regression
 % choose linearRegression variables
-window = 0;
+top_k = 3;
+window_size = 10;
+voice_no = 3;  % voice to use as training data
+n = 100;  % number of notes to sample
+poly_fitting = false;  % whether to include polynomials
+seed = zeros(1, 5 * window_size);
+if poly_fitting
+    seed = [seed cartesianProduct(seed)'];
+end
 
 % perform linearRegression
-LRvoice1 = linearRegressionComposer(F, window, 1);
-LRvoice2 = linearRegressionComposer(F, window, 2);
-LRvoice3 = linearRegressionComposer(F, window, 3);
-LRvoice4 = linearRegressionComposer(F, window, 4);
+[W, b, loss, idx_to_note, ~] = linearRegressionComposer(F, window_size, 1, 0.1, poly_fitting);
+disp('LRvoice1 loss: '), disp(loss);
+LRvoice1 = linearRegressionPredict(W, b, n, seed, window_size, top_k, idx_to_note);
 
+[W, b, loss, idx_to_note, ~] = linearRegressionComposer(F, window_size, 2, 0.1, poly_fitting);
+disp('LRvoice2 loss: '), disp(loss);
+LRvoice2 = linearRegressionPredict(W, b, n, seed, window_size, top_k, idx_to_note);
+
+[W, b, loss, idx_to_note, ~] = linearRegressionComposer(F, window_size, 3, 0.1, poly_fitting);
+disp('LRvoice3 loss: '), disp(loss);
+LRvoice3 = linearRegressionPredict(W, b, n, seed, window_size, top_k, idx_to_note);
+
+[W, b, loss, idx_to_note, ~] = linearRegressionComposer(F, window_size, 4, 0.1, poly_fitting);
+disp('LRvoice4 loss: '), disp(loss);
+LRvoice4 = linearRegressionPredict(W, b, n, seed, window_size, top_k, idx_to_note);
+
+%% Hidden Markov Model
 % choose Markov variables
 
-
 % perform Markov Modelling
-HMvoice1 = preprocess(F(:,1));
-HMvoice2 = preprocess(F(:,1));
-HMvoice3 = preprocess(F(:,1));
-HMvoice4 = preprocess(F(:,1));
+%HMvoice1 = preprocess(F(:,1));
+%HMvoice2 = preprocess(F(:,2));
+%HMvoice3 = preprocess(F(:,3));
+%HMvoice4 = preprocess(F(:,4));
 
-% transform the voices to playable files
+%% Export
+% play a voice
+%playVoice(LRvoice1);
 
 % export the files
+exportVoice(LRvoice1,"LRvoice1");
+exportVoice(LRvoice2,"LRvoice2");
+exportVoice(LRvoice3,"LRvoice3");
+exportVoice(LRvoice4,"LRvoice4");

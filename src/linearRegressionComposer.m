@@ -16,7 +16,7 @@ function [W, b, loss, idx_to_note, note_to_idx] = linearRegressionComposer(voice
     % - idx_to_note: map that maps note indexes to note values
     % - note_to_idx: map that maps note values to note indexes
     
-    [m n] = size(voices);
+    [m,~] = size(voices);
     notes = sort(unique(voices(:, voice_no)));
     n_notes = length(notes);
     n_output = m - window;
