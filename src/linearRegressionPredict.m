@@ -20,9 +20,7 @@ function res = linearRegressionPredict(W, b, n, seed, window, top_k, idx_to_note
        probs = last_out * W + b;
        [~, idxs] = maxk(probs, top_k);
        mask = zeros(1, n_notes);
-       for j = 1:idxs
-          mask(j) = 1;
-       end
+       mask(idxs) = 1;
        probs = mask .* probs;  
        probs = exp(probs) / sum(exp(probs));  % apply softmax to ensure the sum of probabilities is 1
        pred_idx = randsample(1:n_notes, 1, true, probs);
