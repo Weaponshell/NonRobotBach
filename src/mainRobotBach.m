@@ -41,10 +41,10 @@ LRvoice4 = linearRegressionPredict(W, b, n, seed, window_size, top_k, idx_to_not
 % choose Markov variables
 
 % perform Markov Modelling
-%HMvoice1 = preprocess(F(:,1));
-%HMvoice2 = preprocess(F(:,2));
-%HMvoice3 = preprocess(F(:,3));
-%HMvoice4 = preprocess(F(:,4));
+%HMvoice1 = hiddenMarkovComposer(F, 1);
+%HMvoice2 = hiddenMarkovComposer(F, 2);
+%HMvoice3 = hiddenMarkovComposer(F, 3);
+%HMvoice4 = hiddenMarkovComposer(F, 4);
 
 %% Export
 % play a voice
