@@ -40,7 +40,7 @@ LRvoice4 = linearRegressionPredict(W, b, n, seed, window_size, top_k, idx_to_not
 %% Hidden Markov Model
 % choose Markov variables
 states = 4;
-samples = 50;
+samples = 100;
 
 % perform Markov Modelling
 [samples, trans, emit] = hiddenMarkovComposer(F, states, samples);
