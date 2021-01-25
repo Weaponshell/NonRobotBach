@@ -1,4 +1,4 @@
-function [samples, ESTTR, ESTEMIT] = hiddenMarkovComposer(voices, states, samples)
+function [samples, ESTTR, ESTEMIT] = hiddenMarkovComposer(voices, states, to_sample)
     
     [m, ~] = size(voices);
     notes = sort(unique(voices(:)));
@@ -33,9 +33,9 @@ function [samples, ESTTR, ESTEMIT] = hiddenMarkovComposer(voices, states, sample
     %TRGUESS = [[0.5 0.5 0 0 ]; [1/3 1/3 1/3 0]; [0 1/3 1/3 1/3]; [0 0 0.5 0.5]];
     [ESTTR, ESTEMIT] = hmmtrain(observations, TRGUESS, EMITGUESS, 'Verbose', true);
       
-    samples = zeros(samples, 1);
+    samples = zeros(to_sample, 1);
     state = 1; % TODO: how to determine the initial state?
-    for t = 1:samples
+    for t = 1:to_sample
         emit_dist = ESTEMIT(state, :);
         [~, idxs] = maxk(emit_dist, 10);
         mask = zeros(1, n_notes);
