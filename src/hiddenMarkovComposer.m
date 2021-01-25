@@ -46,7 +46,5 @@ function [samples, ESTTR, ESTEMIT] = hiddenMarkovComposer(voices, states, sample
         state = randsample(1:states, 1, true, ESTTR(state, :));
         samples(t) = obs_new;
     end
- 
-    %playVoice(res);
     
 end

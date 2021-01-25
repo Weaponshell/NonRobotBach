@@ -54,4 +54,4 @@ exportVoice(LRvoice1,"LRvoice1");
 exportVoice(LRvoice2,"LRvoice2");
 exportVoice(LRvoice3,"LRvoice3");
 exportVoice(LRvoice4,"LRvoice4");
-%exportVoice(HMvoice,"HMvoice");
+exportVoice(samples,"HMvoice");
