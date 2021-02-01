@@ -32,6 +32,9 @@ function [samples, ESTTR, ESTEMIT] = hiddenMarkovComposer(voices, states, to_sam
     TRGUESS = ones(states, states) / states; % uniform distribution
     %TRGUESS = [[0.5 0.5 0 0 ]; [1/3 1/3 1/3 0]; [0 1/3 1/3 1/3]; [0 0 0.5 0.5]];
     [ESTTR, ESTEMIT] = hmmtrain(observations, TRGUESS, EMITGUESS, 'Verbose', true);
+    
+    % Use the estimates to train HMM better
+    [ESTTR, ESTEMIT] = hmmtrain(observations, ESTTR, ESTEMIT);
       
     samples = zeros(to_sample, 1);
     state = 1; % TODO: how to determine the initial state?
