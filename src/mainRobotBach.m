@@ -42,8 +42,14 @@ LRvoice4 = linearRegressionPredict(W, b, n, seed, window_size, top_k, idx_to_not
 states = 4;
 samples = 100;
 
-% perform Markov Modelling
-[samples, trans, emit] = hiddenMarkovComposer(F, states, samples);
+% perform HMM on the entire dataset
+[HMvoice, ~, ~] = hiddenMarkovComposer(F, states, samples);
+
+% perform HMM on the four different voices
+[HMvoice1, ~, ~] = hiddenMarkovComposer(voice1, states, samples);
+[HMvoice2, ~, ~] = hiddenMarkovComposer(voice2, states, samples);
+[HMvoice3, ~, ~] = hiddenMarkovComposer(voice3, states, samples);
+[HMvoice4, ~, ~] = hiddenMarkovComposer(voice4, states, samples);
 
 %% Export
 % play a voice
@@ -54,4 +60,8 @@ exportVoice(LRvoice1,"LRvoice1");
 exportVoice(LRvoice2,"LRvoice2");
 exportVoice(LRvoice3,"LRvoice3");
 exportVoice(LRvoice4,"LRvoice4");
-exportVoice(samples,"HMvoice");
+exportVoice(HMvoice,"HMvoice");
+exportVoice(HMvoice1,"HMvoice1");
+exportVoice(HMvoice2,"HMvoice2");
+exportVoice(HMvoice3,"HMvoice3");
+exportVoice(HMvoice4,"HMvoice4");
